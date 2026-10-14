@@ -74,5 +74,6 @@ logo.svg                   — โลโก้โปรเจกต์
 
 ## Credit
 
+- Codebase / tutorial: [ESP32 Dino Game with OLED Display | Complete Tutorial](https://www.youtube.com/watch?v=MlQA4UohX_I)
 - Base game: [AlexIII/t-rex-duino](https://github.com/AlexIII/t-rex-duino) (MIT)
 - ESP32 + SSD1306 port, menu/record, I2C chunk fix: this repo
