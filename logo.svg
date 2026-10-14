@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" viewBox="0 0 640 320">
+  <rect width="640" height="320" rx="24" fill="#0B0E14"/>
+  <rect x="40" y="40" width="560" height="240" rx="12" fill="#000000" stroke="#3DDC84" stroke-width="3"/>
+  <!-- pixel dino -->
+  <g fill="#FFFFFF">
+    <rect x="120" y="120" width="60" height="20"/>
+    <rect x="170" y="100" width="30" height="30"/>
+    <rect x="190" y="110" width="6" height="6" fill="#000000"/>
+    <rect x="130" y="140" width="20" height="40"/>
+    <rect x="160" y="140" width="14" height="40"/>
+    <rect x="130" y="180" width="10" height="20"/>
+    <rect x="164" y="180" width="10" height="20"/>
+    <rect x="110" y="130" width="20" height="10"/>
+  </g>
+  <!-- cacti -->
+  <g fill="#3DDC84">
+    <rect x="420" y="140" width="14" height="60"/>
+    <rect x="408" y="150" width="12" height="24"/>
+    <rect x="408" y="150" width="6" height="10"/>
+    <rect x="434" y="160" width="12" height="20"/>
+    <rect x="440" y="160" width="6" height="10"/>
+    <rect x="470" y="150" width="12" height="50"/>
+  </g>
+  <!-- ground -->
+  <g fill="#8B949E">
+    <rect x="60" y="205" width="520" height="3"/>
+    <rect x="100" y="212" width="14" height="3"/>
+    <rect x="250" y="215" width="20" height="3"/>
+    <rect x="400" y="212" width="14" height="3"/>
+    <rect x="500" y="215" width="20" height="3"/>
+  </g>
+  <text x="260" y="135" font-family="monospace" font-size="44" font-weight="bold" fill="#FFFFFF">DINO</text>
+  <text x="260" y="175" font-family="monospace" font-size="30" font-weight="bold" fill="#3DDC84">JUMP</text>
+  <text x="260" y="198" font-family="monospace" font-size="14" fill="#8B949E">ESP32 + SSD1306</text>
+  <circle cx="545" cy="70" r="6" fill="#FF3B30"/>
+  <circle cx="560" cy="70" r="6" fill="#FFCC00"/>
+  <circle cx="575" cy="70" r="6" fill="#3DDC84"/>
+</svg>
