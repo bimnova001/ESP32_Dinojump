@@ -2,75 +2,75 @@
 
 ![logo](logo.svg)
 
-Chrome T-Rex runner บน **ESP32 + OLED SSD1306 128x64 (I2C 0x3C)** + ปุ่มเดียว + buzzer. มีเมนู START / RECORD / INFO และเซฟคะแนนสูงสุดลง flash.
+Chrome T-Rex runner on **ESP32 + SSD1306 128x64 OLED (I2C 0x3C)** with a single push button + buzzer. Includes a START / RECORD / INFO menu and persists the high score to flash.
 
-## Demo
+## Features
 
-- `START` — เริ่มเกม กระโดดหลบกระบองเพชร + นก, เก็บหัวใจเพิ่มชีวิต
-- `RECORD` — ดู `HI` / `LAST` (จำค่าข้ามรีบูตด้วย Preferences/NVS)
-- `INFO` — ดูวิธีกดปุ่ม + สเปกจอ
+- `START` — run and jump over cacti + pterodactyls, collect hearts for extra lives
+- `RECORD` — shows `HI` / `LAST` score (survives reboot via Preferences/NVS)
+- `INFO` — button help + display spec
 
 ## Hardware
 
-| อุปกรณ์ | ต่อขา |
+| Part | Wiring |
 |---|---|
 | OLED SSD1306 SDA | GPIO21 |
 | OLED SSD1306 SCL | GPIO22 |
 | OLED VCC / GND | 3V3 / GND |
-| ปุ่มกด | GPIO18 <-> GND (`INPUT_PULLUP`, กด = LOW) |
-| Buzzer (+) | GPIO12 (ไม่ต่อก็ได้) |
+| Push button | GPIO18 <-> GND (`INPUT_PULLUP`, pressed = LOW) |
+| Buzzer (+) | GPIO12 (optional) |
 
-> จอต้องเป็น SSD1306 0.96" address `0x3C`. ถ้าเป็น SH1106 1.3" ให้ comment `#define LCD_SSD1306` ใน `t-rex-duino.h` กลับ
+> Display must be SSD1306 0.96" at address `0x3C`. For SH1106 1.3", comment out `#define LCD_SSD1306` in `t-rex-duino.h`.
 
 ## Controls
 
-| หน้า | ปุ่ม |
+| Screen | Button |
 |---|---|
-| Menu | กดสั้น 1 ครั้ง = เลื่อน, กดค้าง ~0.5s / เบิ้ล = เลือก |
-| RECORD / INFO | กดอะไรก็ได้ = กลับเมนู |
-| ในเกม | กดค้าง = กระโดด (`trex.jump()`), ปล่อย = ตก |
-| Game Over | กดสั้น / กดค้าง = กลับเมนู (คะแนนเซฟอัตโนมัติ) |
+| Menu | 1 short press = next, long press ~0.5s / double-click = select |
+| RECORD / INFO | any press = back to menu |
+| In game | hold = jump (`trex.jump()`), release = fall |
+| Game Over | short / long press = back to menu (score auto-saved) |
 
 ## Build & Flash
 
-1. เปิด `trex_esp32_pushbutton.ino` ใน Arduino IDE
-2. เลือกบอร์ด ESP32 (เช่น ESP32 Dev Module), `Upload Speed 921600`
-3. ไม่ต้องลง lib OLED — driver I2C เขียนเองใน `TRexCore.h` (clock 400kHz, ส่งทีละ 32 byte กัน `Wire` overflow)
-4. เปิด Serial 115200 ดู log ได้
+1. Open `trex_esp32_pushbutton.ino` in Arduino IDE
+2. Select an ESP32 board (e.g. ESP32 Dev Module), `Upload Speed 921600`
+3. No OLED library needed — custom I2C driver in `TRexCore.h` (400kHz clock, 32-byte chunks to avoid `Wire` overflow)
+4. Open Serial at 115200 for logs
 
-ไฟล์ทดสอบจอแยก (ไม่ต้องลง lib):
+Standalone display test (no library needed):
 
 ```cpp
-// oled_test — ดูโค้ดเต็มในแชท
+// oled_test — see full code in chat history
 Wire.begin(21, 22);
-Wire.setClock(100000); // scan หา 0x3C
-Wire.setClock(400000); // init SSD1306 + เทสขาว/ดำ/ตาราง
+Wire.setClock(100000); // scan for 0x3C
+Wire.setClock(400000); // init SSD1306 + white/black/checker test
 ```
 
 ## Project structure
 
 ```
-trex_esp32_pushbutton.ino  — setup/loop, กำหนดขา SDA/SCL/BTN/BUZZER
-t-rex-duino.h              — เสียง, ปุ่ม (debounce/multi-click/long-press),
-                             menu START/RECORD/INFO, gameLoop, ฟอนต์ 5x7
-TRexCore.h                 — สไปรต์เกม, engine, driver SSD1306/SH1106 I2C
-logo.svg                   — โลโก้โปรเจกต์
+trex_esp32_pushbutton.ino  — setup/loop, SDA/SCL/BTN/BUZZER pins
+t-rex-duino.h              — sounds, button (debounce/multi-click/long-press),
+                             START/RECORD/INFO menu, gameLoop, 5x7 font
+TRexCore.h                 — game sprites, engine, SSD1306/SH1106 I2C driver
+logo.svg                   — project logo
 ```
 
-## Config ที่น่าแก้
+## Useful config
 
-- `t-rex-duino.h: #define LCD_SSD1306` — เปิด = SSD1306 / ปิด = SH1106
-- `TRexCore.h: SH1106_I2C_SCL_CLOCK 400000UL` — จอเอ๋อให้ลดเหลือ `100000UL`
-- `GAME_BUTTON_PIN / BUZZER_PIN` ใน `.ino`
-- `TARGET_FPS_START/MAX`, `LIVES_START/MAX` ใน `t-rex-duino.h`
-- ล้างคะแนน: `dinoPrefs.clear()` หรือแฟลชแบบ erase flash
+- `t-rex-duino.h: #define LCD_SSD1306` — defined = SSD1306 / undefined = SH1106
+- `TRexCore.h: SH1106_I2C_SCL_CLOCK 400000UL` — drop to `100000UL` if display glitches
+- `GAME_BUTTON_PIN / BUZZER_PIN` in `.ino`
+- `TARGET_FPS_START/MAX`, `LIVES_START/MAX` in `t-rex-duino.h`
+- Clear scores: `dinoPrefs.clear()` or flash with erase
 
-## Troubleshooting จอดำ
+## Troubleshooting (black screen)
 
-1. รัน I2C scanner ต้องเจอ `0x3C` ถ้าไม่เจอ = สาย/ไฟ (สลับ SDA/SCL บ่อยสุด, VCC ต้อง 3V3)
-2. เจอ `0x3C` แต่ดำ = ผิด driver (SH1106 vs SSD1306) หรือ clock สูงไป ลอง `100kHz`
-3. ขึ้น splash แต่ภาพเลื่อน = addressing mode ผิด ต้องเป็น Page mode (`0x20,0x02`)
-4. GPIO12 เป็น strapping pin ถ้าบูตไม่ขึ้นให้ถอด buzzer แล้วลองใหม่
+1. Run an I2C scanner, it must find `0x3C`. If not = wiring/power (swapped SDA/SCL is most common, VCC must be 3V3).
+2. Found `0x3C` but black = wrong driver (SH1106 vs SSD1306) or clock too high, try `100kHz`.
+3. Splash shows but shifted = wrong addressing mode, must be Page mode (`0x20,0x02`).
+4. GPIO12 is a strapping pin — if the board won't boot, disconnect the buzzer and retry.
 
 ## Credit
 
